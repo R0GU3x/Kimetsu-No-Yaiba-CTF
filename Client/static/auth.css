@@ -1,0 +1,279 @@
+/* ═══════════════════════════════════════════
+   AUTH — KimetsuCTF (Single-Player)
+   Username prompt · Account panel · Logout
+═══════════════════════════════════════════ */
+
+/* ── Shared overlay shell ── */
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 8500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.auth-overlay.is-active { display: flex; }
+
+.auth-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 2, 10, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ── Auth card ── */
+.auth-card {
+  position: relative;
+  z-index: 1;
+  width: min(480px, 92vw);
+  background: var(--panel);
+  border: 1px solid var(--border-dim);
+  clip-path: polygon(
+    0 0,
+    calc(100% - 20px) 0,
+    100% 20px,
+    100% 100%,
+    20px 100%,
+    0 calc(100% - 20px)
+  );
+  padding: 36px 32px 32px;
+  animation: authCardIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes authCardIn {
+  from { opacity: 0; transform: translate3d(0, 24px, 0) scale(0.97); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+.auth-card .wisteria-corner svg { opacity: 0.25; }
+
+/* ── Card header ── */
+.auth-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  gap: 16px;
+}
+
+.auth-kanji {
+  font-family: var(--font-jp);
+  font-weight: 900;
+  font-size: 48px;
+  line-height: 1;
+  color: var(--gold);
+  text-shadow: 0 0 24px rgba(200,146,42,0.35);
+  display: block;
+}
+
+.auth-title-en {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 0.25em;
+  color: var(--white-smoke);
+  text-transform: uppercase;
+  margin-top: 2px;
+  display: block;
+}
+
+.auth-subtitle {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  color: var(--white-dim);
+  text-transform: uppercase;
+  margin-top: 6px;
+  opacity: 0.7;
+}
+
+.auth-close-btn {
+  background: transparent;
+  border: 1px solid var(--border-dim);
+  color: var(--white-dim);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  flex-shrink: 0;
+  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+}
+.auth-close-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ── Divider ── */
+.auth-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-glow), transparent);
+  margin-bottom: 24px;
+  opacity: 0.4;
+}
+
+/* ── Form fields ── */
+.auth-field { margin-bottom: 18px; }
+
+.auth-field-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.auth-field-label::before {
+  content: '';
+  display: block;
+  width: 14px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.auth-input {
+  width: 100%;
+  background: var(--black);
+  border: 1px solid var(--border-dim);
+  color: var(--white-smoke);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  padding: 12px 16px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  letter-spacing: 0.04em;
+  box-sizing: border-box;
+}
+.auth-input::placeholder { color: rgba(255,255,255,0.18); }
+.auth-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 14px rgba(200,146,42,0.18);
+}
+.auth-input.is-error {
+  border-color: var(--blood-bright);
+  box-shadow: 0 0 12px rgba(204,17,17,0.2);
+}
+
+/* ── Field error ── */
+.auth-field-error {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--blood-bright);
+  margin-top: 6px;
+  letter-spacing: 0.1em;
+  min-height: 14px;
+  display: none;
+}
+.auth-field-error.is-visible { display: block; }
+
+/* ── Global feedback ── */
+.auth-feedback {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  display: none;
+  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+}
+.auth-feedback.is-visible { display: block; }
+.auth-feedback.is-error   { background: rgba(139,0,0,0.2); border: 1px solid var(--blood-bright); color: var(--blood-bright); }
+.auth-feedback.is-success { background: rgba(10,107,74,0.15); border: 1px solid var(--jade); color: var(--jade-bright); }
+
+/* ── Primary action button ── */
+.auth-btn {
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: 0.25em;
+  padding: 13px 0;
+  width: 100%;
+  background: linear-gradient(135deg, var(--blood) 0%, var(--blood-bright) 100%);
+  color: var(--white-smoke);
+  border: 1px solid rgba(204,17,17,0.4);
+  cursor: pointer;
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  transition: box-shadow 0.25s;
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+.auth-btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+  transition: left 0.4s;
+}
+.auth-btn:hover { box-shadow: 0 0 28px rgba(204,17,17,0.45); }
+.auth-btn:hover::after { left: 100%; }
+.auth-btn:disabled { opacity: 0.45; cursor: default; box-shadow: none; }
+
+/* ── Switch text ── */
+.auth-switch {
+  margin-top: 20px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--white-dim);
+}
+
+/* ── Nav account button ── */
+.nav-account-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: var(--white-dim);
+  background: transparent;
+  border: none;
+  padding: 6px 16px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: color 0.2s, text-shadow 0.2s, letter-spacing 0.2s;
+  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+}
+.nav-account-btn:hover,
+.nav-account-btn.is-logged-in {
+  color: var(--gold);
+  text-shadow: 0 0 14px rgba(200,146,42,0.7), 0 0 28px rgba(200,146,42,0.35);
+  letter-spacing: 0.32em;
+}
+
+/* ── Leaderboard player row ── */
+.lb-player-row td {
+  color: var(--gold-bright) !important;
+  background: rgba(200,146,42,0.06) !important;
+}
+.lb-player-row .lb-bar-fill {
+  background: var(--gold-bright) !important;
+}
+
+/* ── Account stat cell (inline on card) ── */
+.account-stat-cell {}
+.account-stat-val {
+  font-family: var(--font-display);
+  font-size: 28px;
+  color: var(--gold-bright);
+}
+.account-stat-key {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  opacity: 0.6;
+  margin-top: 4px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .auth-card { padding: 24px 20px 20px; }
+  .auth-kanji { font-size: 36px; }
+  .auth-title-en { font-size: 17px; }
+}

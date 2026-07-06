@@ -1,0 +1,15 @@
+# python cache files
+Server/__pycache__
+Server/core/__pycache__
+
+# folders
+Files/
+Vulnweb/
+Client/assets
+
+# files
+Server/core/players.json
+Kimetsu-CTF.zip
+
+# others
+desktop.ini

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>鬼滅CTF — Kimetsu no Yaiba Capture The Flag</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<link rel="stylesheet" href="static/styles.css" />
+<link rel="stylesheet" href="static/auth.css" />
+<link rel="stylesheet" href="static/video.css" />
+<!-- fav icon -->
+<link rel="icon" type="image/png" href="static/icon.png" />
+<style>
+/* ── Downloadable Files Component ── */
+.downloads-section {
+  margin: 18px 0;
+  padding: 14px 16px;
+  background: rgba(200,146,42,0.04);
+  border: 1px solid rgba(200,146,42,0.14);
+  border-radius: 4px;
+}
+.downloads-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.downloads-icon { opacity: 0.7; }
+.downloads-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(200,146,42,0.25);
+  color: var(--white-dim);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  cursor: pointer;
+}
+.download-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+  background: rgba(200,146,42,0.1);
+}
+.dl-icon { color: var(--gold); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<!-- ══ ATMOSPHERIC CANVAS ══ -->
+<canvas id="atmos-canvas"></canvas>
+
+<!-- custom cursor elements removed -->
+
+<!-- ══ SLASH FLASH OVERLAY ══ -->
+<div id="slash-flash">
+  <div class="slash-flash-line"></div>
+  <div class="slash-flash-line slash-flash-line-2"></div>
+</div>
+
+<!-- ══ NAVIGATION ══ -->
+<nav id="nav-bar">
+  <div class="nav-brand">鬼滅CTF</div>
+  <div class="nav-links">
+    <a href="#hero" class="nav-link">Mission</a>
+    <a href="#challenges-wrapper" class="nav-link">Challenges</a>
+  </div>
+  <button id="nav-account-btn" class="nav-account-btn" type="button" aria-label="Account">ENLIST</button>
+  <div class="nav-score-display">
+    <span class="nav-score-label">Score</span>
+    <span id="nav-score-value">0</span>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════
+   SECTION 1 — HERO
+═══════════════════════════════════════════ -->
+<section id="hero">
+  <div class="slash-bg-deep"></div>
+  <div class="slash-panel">
+    <div class="slash-cut-1"></div>
+    <div class="slash-cut-2"></div>
+    <div class="slash-accent-line"></div>
+  </div>
+
+  <!-- Background glyphs -->
+  <div class="glyph-bg" style="top:8%;left:58%;font-size:300px;transform:rotate(-12deg);">鬼</div>
+  <div class="glyph-bg" style="top:50%;left:72%;font-size:180px;transform:rotate(8deg);">滅</div>
+  <div class="glyph-bg" style="top:65%;left:5%;font-size:120px;transform:rotate(-5deg);">刃</div>
+
+  <div class="rank-badge">鬼殺隊 // DEMON SLAYER CORPS CTF</div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span>Season 01</span>
+      <span>Easy/Medium/Hard</span>
+    </div>
+
+    <span class="hero-jp-title">鬼滅</span>
+    <span class="hero-en-title">KIMETSU NO YAIBA — CAPTURE THE FLAG</span>
+
+    <p class="hero-subtitle">
+      The demons of the digital realm have infiltrated the network. Only those with the keenest blade and sharpest mind may inherit the rank of Hashira. Solve the challenges. Submit the flags. Ascend.
+    </p>
+
+    <div class="hero-cta-group">
+      <a href="#challenges-wrapper" class="btn-primary">BEGIN MISSION</a>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-block">
+      <div class="stat-value" id="hero-total-challenges">0</div>
+      <div class="stat-label">Challenges</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value" id="hero-chapters-unlocked">0/0</div>
+      <div class="stat-label">Chapters Unlocked</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value" id="hero-max-points">0</div>
+      <div class="stat-label">Max Points</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value" id="hero-solves">0</div>
+      <div class="stat-label">Your Solves</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-value" id="hero-completion">0%</div>
+      <div class="stat-label">Completion</div>
+    </div>
+  </div>
+
+  <!-- <div class="breathing-indicator">
+    <div class="breathing-label">Breathing Styles Active</div>
+    <div class="breathing-dots">
+      <div class="b-dot"></div>
+      <div class="b-dot"></div>
+      <div class="b-dot"></div>
+      <div class="b-dot"></div>
+      <div class="b-dot"></div>
+    </div>
+  </div> -->
+</section>
+
+<!-- ═══════════════════════════════════════
+   SECTION 2 — CHALLENGE ROSTER (Vertical)
+═══════════════════════════════════════════ -->
+<div id="challenges-wrapper">
+  <!-- category-quicknav injected here by script.js -->
+  <div id="challenges-container">
+    <!-- challenge sections injected by buildRoster() -->
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ -->
+<footer id="site-footer">
+  <div class="footer-brand">鬼滅CTF</div>
+  <div class="footer-meta">© 2026 KimetsuCTF // Copyright © 2026 ROGUE. All rights reserved. </div>
+  <div class="footer-meta">v4.7.0 — Offline Solo-Player Build</div>
+</footer>
+
+<!-- ═══════════════════════════════════════
+   MODAL — THE DEMON INQUISITION
+═══════════════════════════════════════════ -->
+<div id="modal-overlay" role="dialog" aria-modal="true">
+  <div class="modal-backdrop" id="modal-backdrop"></div>
+  <div class="modal-container" id="modal-container">
+
+    <!-- Wisteria corner decorations -->
+    <div class="wisteria-corner tl">
+      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 0 L60 0 L0 60 Z" fill="rgba(200,146,42,0.8)"/>
+        <line x1="0" y1="20" x2="20" y2="0" stroke="rgba(200,146,42,0.5)" stroke-width="1"/>
+        <line x1="0" y1="40" x2="40" y2="0" stroke="rgba(200,146,42,0.3)" stroke-width="1"/>
+      </svg>
+    </div>
+
+    <div class="modal-media">
+      <div class="modal-media-bg" id="modal-media-bg"></div>
+      <div class="modal-media-overlay"></div>
+      <div class="modal-media-corner" id="modal-kanji-bg">鬼</div>
+      <div class="modal-category-badge">
+        <div>
+          <div class="modal-points-big" id="modal-points">500</div>
+          <div class="modal-pts-label">POINTS</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-header-row">
+        <div class="modal-challenge-title" id="modal-title">Challenge Title</div>
+        <button class="modal-close-btn" id="modal-close-btn" aria-label="Close">✕</button>
+      </div>
+
+      <div class="modal-lore-box" id="modal-lore"></div>
+
+      <div class="modal-meta-grid">
+        <div class="meta-item">
+          <div class="meta-item-label">Chapter</div>
+          <div class="meta-item-value" id="modal-category">—</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-item-label">Difficulty</div>
+          <div class="meta-item-value" id="modal-difficulty">—</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-item-label">Author</div>
+          <div class="meta-item-value" id="modal-author">—</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-item-label">Category</div>
+          <div class="meta-item-value" id="modal-tag">—</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-item-label">Breathing Style</div>
+          <div class="meta-item-value" id="modal-breathing">—</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-item-label">Status</div>
+          <div class="meta-item-value" id="modal-status" style="color:var(--jade-bright)">—</div>
+        </div>
+      </div>
+
+      <div class="hint-section">
+        <button class="hint-toggle" id="hint-toggle">
+          <span>⚔ REVEAL HINT</span>
+          <span class="hint-toggle-icon">▼</span>
+        </button>
+        <div class="hint-content" id="hint-content">
+          <div class="hint-inner" id="hint-text"></div>
+        </div>
+      </div>
+
+      <div class="flag-submit-area" id="flag-submit-area">
+        <div class="flag-label">Submit Flag</div>
+        <div class="flag-input-row">
+          <input
+            type="text"
+            class="flag-input"
+            id="flag-input"
+            placeholder="KNY{subm!t_y0ur_flag_h3r3}"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+          />
+          <button class="flag-submit-btn" id="flag-submit-btn">SUBMIT</button>
+        </div>
+        <div class="flag-feedback" id="flag-feedback"></div>
+      </div>
+    </div>
+
+    <!-- Wisteria bottom-right corner — always last child -->
+    <!-- <div class="wisteria-corner br">
+      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M60 60 L0 60 L60 0 Z" fill="rgba(200,146,42,0.8)"/>
+        <line x1="60" y1="40" x2="40" y2="60" stroke="rgba(200,146,42,0.5)" stroke-width="1"/>
+        <line x1="60" y1="20" x2="20" y2="60" stroke="rgba(200,146,42,0.3)" stroke-width="1"/>
+      </svg>
+    </div> -->
+
+  </div>
+</div>
+
+<script src="static/script.js"></script>
+<script src="static/tracker.js"></script>
+<script src="static/video.js"></script>
+<script src="static/auth.js"></script>
+</body>
+</html>
