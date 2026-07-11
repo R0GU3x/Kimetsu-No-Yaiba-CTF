@@ -4,6 +4,23 @@
 
 Welcome to **鬼滅 CTF**, a browser-based Capture The Flag experience inspired by **Kimetsu no Yaiba**.
 
+## 🎮 Play the CTF
+
+If you simply want to **play the CTF** and are **not hosting your own instance**, download the pre-configured package below.
+
+**Download:**
+https://drive.google.com/file/d/1IUiw0lPJlV-fGkCychUuXOLTfePpDwiD/view
+
+**ZIP Password:**
+
+```text
+k!m3tsuN0y@iba
+```
+
+After extracting the archive, open **`index.html`** in your web browser and begin your journey.
+
+---
+
 ## 🚀 Getting Started
 
 ### 1. Start the Backend Server
