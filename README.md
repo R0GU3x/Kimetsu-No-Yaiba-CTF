@@ -1,10 +1,19 @@
-![A descriptive title](/Client/static/kny-s1-logo.png)
+<p align="center">
+  <img src="/Client/static/kny-s1-logo.png" alt="Kimetsu CTF Logo" width="350">
+</p>
 
-# 鬼滅 CTF — Kimetsu CTF
+# 鬼滅 CTF
 
 Welcome to **鬼滅 CTF**, a browser-based Capture The Flag experience inspired by **Kimetsu no Yaiba**.
 
-## 🎮 Play the CTF
+<strong>Digital demons have emerged</strong>.
+
+Your mission is to stay alive, solve the challenges, and save the world from the digital demons.
+
+Good luck, Slayer.
+
+<details>
+<summary>🎮 Play the CTF</summary>
 
 If you simply want to **play the CTF** and are **not hosting your own instance**, download the pre-configured package below.
 
@@ -20,8 +29,10 @@ k!m3tsuN0y@iba
 After extracting the archive, open **`index.html`** in your web browser and begin your journey.
 
 ---
+</details>
 
-## 🚀 Getting Started
+<details>
+<summary>⚙️ Configure the CTF</summary>
 
 ### 1. Start the Backend Server
 
@@ -85,9 +96,12 @@ No additional setup is required.
 
 ---
 
-## 🌐 Internet Connection
+</details>
 
-A stable internet connection is required because:
+<details>
+<summary>🍷 Other Requirements</summary>
+
+A <b>stable internet connection</b> is required because:
 
 - Static assets are loaded online.
 - The backend communicates through the Cloudflared tunnel.
@@ -95,14 +109,4 @@ A stable internet connection is required because:
 
 ---
 
-## 🎯 Mission
-
-Digital demons have emerged.
-
-Your mission is to stay alive, solve the challenges, and save the world from the digital demons.
-
-Good luck, Slayer.
-
----
-
-# GAMBARE GAMBARE !!! ⚔️🔥
+</details>
