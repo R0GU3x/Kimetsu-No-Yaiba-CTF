@@ -228,6 +228,57 @@ class PlayerRegistry:
                 for player in self.players.values()
             ]
 
+    # def snapshot(self):
+
+    #     now = datetime.now()
+
+    #     with self.lock:
+
+    #         rows = []
+
+    #         for player in self.players.values():
+
+    #             if player.requests == 0:
+
+    #                 since = None
+    #                 online = False
+
+    #             else:
+
+    #                 since = (
+    #                     now -
+    #                     player.last_seen
+    #                 ).total_seconds()
+
+    #                 online = since <= ONLINE_TIMEOUT
+
+    #             rows.append({
+
+    #                 "ip": player.ip,
+    #                 "username": player.username,
+    #                 "location": location_resolver.get(
+    #                     player.username,
+    #                     player.ip,
+    #                 ),
+    #                 "points": player.points,
+
+    #                 "requests": player.requests,
+
+    #                 "first_seen": player.first_seen,
+    #                 "last_seen": player.last_seen,
+
+    #                 # "since": since,
+
+    #                 "online": online,
+
+    #             })
+
+    #     rows.sort(
+    #         key=lambda p: -p["points"]
+    #     )
+
+    #     return rows
+
     def snapshot(self):
 
         now = datetime.now()
@@ -239,35 +290,28 @@ class PlayerRegistry:
             for player in self.players.values():
 
                 if player.requests == 0:
-
-                    since = None
                     online = False
-
                 else:
-
-                    since = (
-                        now -
-                        player.last_seen
-                    ).total_seconds()
-
-                    online = since <= ONLINE_TIMEOUT
+                    online = (
+                        now - player.last_seen
+                    ).total_seconds() <= ONLINE_TIMEOUT
 
                 rows.append({
 
                     "ip": player.ip,
                     "username": player.username,
+
                     "location": location_resolver.get(
                         player.username,
                         player.ip,
                     ),
+
                     "points": player.points,
 
                     "requests": player.requests,
 
                     "first_seen": player.first_seen,
                     "last_seen": player.last_seen,
-
-                    "since": since,
 
                     "online": online,
 
@@ -289,6 +333,9 @@ class Monitor:
         self._total_pages = 1
         self._page_lock = Lock()
         self._last_console_size = self.console.size
+
+        # Add this
+        self._last_online_states = {}
 
     def _prev_page(self) -> None:
         with self._page_lock:
@@ -422,11 +469,11 @@ class Monitor:
             "Last Seen",
         )
 
-        table.add_column(
-            "Since Last Seen",
-            justify="right",
-            style="yellow",
-        )
+        # table.add_column(
+        #     "Since Last Seen",
+        #     justify="right",
+        #     style="yellow",
+        # )
 
         table.add_column(
             "Requests",
@@ -452,11 +499,23 @@ class Monitor:
                 else player["last_seen"].strftime("%Y-%m-%d %H:%M:%S")
             )
 
-            since = (
-                "-"
-                if player["since"] is None
-                else f"{player['since']:.1f}s"
-            )
+            # since = (
+            #     "-"
+            #     if player["since"] is None
+            #     else f"{player['since']:.1f}s"
+            # )
+
+            # table.add_row(
+            #     player["ip"],
+            #     player["username"],
+            #     player["location"],
+            #     status,
+            #     str(player["points"]),
+            #     first_seen,
+            #     last_seen,
+            #     since,
+            #     str(player["requests"]),
+            # )
 
             table.add_row(
                 player["ip"],
@@ -466,7 +525,6 @@ class Monitor:
                 str(player["points"]),
                 first_seen,
                 last_seen,
-                since,
                 str(player["requests"]),
             )
 
@@ -521,18 +579,50 @@ class Monitor:
             daemon=True,
         ).start()
 
+        # with Live(
+        #     self.build_table(),
+        #     console=self.console,
+        #     screen=True,
+        #     refresh_per_second=1,
+        #     transient=False,
+        # ) as live:
+
         with Live(
             self.build_table(),
             console=self.console,
             screen=True,
-            refresh_per_second=30,
+            auto_refresh=False,
             transient=False,
         ) as live:
 
-            while True:
+            # while True:
 
-                self.registry.changed.wait(timeout=0.3)
-                self.registry.changed.clear()
+            #     self.registry.changed.wait(timeout=1)
+            #     self.registry.changed.clear()
+
+            #     live.update(
+            #         self.build_table(),
+            #         refresh=True,
+            #     )
+
+            while True:
+                changed = self.registry.changed.wait(timeout=1)
+
+                # Timeout occurred; refresh only if an ONLINE/OFFLINE state changed.
+                if not changed:
+                    snapshot = self.registry.snapshot()
+
+                    online_states = {
+                        (p["username"], p["ip"]): p["online"]
+                        for p in snapshot
+                    }
+
+                    if online_states == self._last_online_states:
+                        continue
+
+                    self._last_online_states = online_states
+                else:
+                    self.registry.changed.clear()
 
                 live.update(
                     self.build_table(),

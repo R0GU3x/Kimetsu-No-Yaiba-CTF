@@ -6,6 +6,13 @@ from flask_cors import CORS
 from core.monitor import Monitor, PlayerRegistry
 from core.storage import PlayerStorage
 
+import logging
+from flask.cli import show_server_banner
+
+show_server_banner = lambda *args: None
+
+logging.getLogger("werkzeug").disabled = True
+
 app = Flask(__name__)
 CORS(app)
 
