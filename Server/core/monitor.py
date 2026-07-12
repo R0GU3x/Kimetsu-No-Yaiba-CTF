@@ -6,17 +6,41 @@ from threading import Event, Lock, Thread
 from time import sleep
 from typing import Dict, List, Tuple
 
+from arrow import now
 import requests
 from rich.console import Console
 from rich.live import Live
 from rich.panel import Panel
 from rich.table import Table
 
+from pathlib import Path
+from threading import Thread
+
+import winsound
 
 ONLINE_TIMEOUT = 30
 # Panel title, borders, table header, subtitle, and a small safety margin.
 LAYOUT_OVERHEAD = 8
 
+CORE_DIR = Path(__file__).resolve().parent
+JOIN_SOUND = CORE_DIR / "music" / "join.wav"
+
+
+def play_join_sound():
+    """
+    Play the player-join notification asynchronously.
+    """
+
+    if not JOIN_SOUND.exists():
+        return
+
+    try:
+        winsound.PlaySound(
+            str(JOIN_SOUND),
+            winsound.SND_FILENAME | winsound.SND_ASYNC,
+        )
+    except Exception:
+        pass
 
 class LocationResolver:
     """
@@ -184,6 +208,19 @@ class PlayerRegistry:
 
         with self.lock:
 
+            # if key not in self.players:
+
+            #     self.players[key] = PlayerInfo(
+            #         ip=ip,
+            #         username=username,
+            #         points=points,
+            #         first_seen=now,
+            #         last_seen=now,
+            #         requests=1,
+            #     )
+
+            #     persistent_changed = True
+
             if key not in self.players:
 
                 self.players[key] = PlayerInfo(
@@ -194,6 +231,8 @@ class PlayerRegistry:
                     last_seen=now,
                     requests=1,
                 )
+
+                play_join_sound()
 
                 persistent_changed = True
 
