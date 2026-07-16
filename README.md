@@ -1,8 +1,18 @@
+# 鬼滅 CTF
+
 <p align="center">
-  <img src="/Client/static/kny-s1-logo.png" alt="Kimetsu CTF Logo" width="350">
+  <img src="/Server/snaps/stats.png" width="100%">
 </p>
 
-# 鬼滅 CTF
+<p align="center">
+  <img src="/Server/snaps/UI-1.png" width="48%">
+  <img src="/Server/snaps/UI-2.png" width="48%">
+</p>
+
+<p align="center">
+  <img src="/Server/snaps/UI-3.png" width="48%">
+  <img src="/Server/snaps/UI-4.png" width="48%">
+</p>
 
 Welcome to **鬼滅 CTF**, a browser-based Capture The Flag experience inspired by **Kimetsu no Yaiba**.
 
@@ -30,6 +40,12 @@ After extracting the archive, open **`index.html`** in your web browser and begi
 
 ---
 </details>
+
+<p align="center">
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+</p>
 
 <details>
 <summary>⚙️ Configure the CTF</summary>
