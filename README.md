@@ -43,7 +43,7 @@ After extracting the archive, open **`index.html`** in your web browser and begi
 
 <p align="center">
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━
 
 </p>
 
