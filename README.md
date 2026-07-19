@@ -2,7 +2,6 @@
 
 <p align="center">
   <img src="/Server/snaps/stats.png" width="100%">
-  <em>Figure 1: Particpants from across the Globe</em>
 </p>
 
 <p align="center">
