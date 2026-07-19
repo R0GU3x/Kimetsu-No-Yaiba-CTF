@@ -14,16 +14,8 @@
   <img src="/Server/snaps/UI-4.png" width="48%">
 </p>
 
-Welcome to **鬼滅 CTF**, a browser-based Capture The Flag experience inspired by **Kimetsu no Yaiba**.
-
-<strong>Digital demons have emerged</strong>.
-
-Your mission is to stay alive, solve the challenges, and save the world from the digital demons.
-
-Good luck, Slayer.
-
 ## 🎮 Play the CTF
-If you simply want to play the CTF and are not hosting your own instance, download the pre-configured package below.
+If you simply want to play the CTF, follow the steps mentioned below.
 
 ### Step 1 — Downloading Assets
 
