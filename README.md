@@ -2,6 +2,7 @@
 
 <p align="center">
   <img src="/Server/snaps/stats.png" width="100%">
+  <em>Figure 1: Particpants from across the Globe</em>
 </p>
 
 <p align="center">
@@ -22,28 +23,49 @@ Your mission is to stay alive, solve the challenges, and save the world from the
 
 Good luck, Slayer.
 
-<details>
-<summary>🎮 Play the CTF</summary>
+## 🎮 Play the CTF
+If you simply want to play the CTF and are not hosting your own instance, download the pre-configured package below.
 
-If you simply want to **play the CTF** and are **not hosting your own instance**, download the pre-configured package below.
+### Step 1 — Downloading Assets
 
-**Download:**
-https://drive.google.com/file/d/1IUiw0lPJlV-fGkCychUuXOLTfePpDwiD/view
+- [The primary CTF Asset](https://drive.google.com/file/d/1IUiw0lPJlV-fGkCychUuXOLTfePpDwiD/view)
+- [Instruction Manual](https://raw.githubusercontent.com/R0GU3x/C2C-Malware-for-Windows-Demo-/master/Instruction%20Manual.pdf)
 
-**ZIP Password:**
+---
+
+### Step 2 — Extract the Archive
+
+Use the following password to extract the ZIP Archive:
 
 ```text
 k!m3tsuN0y@iba
 ```
-
-After extracting the archive, open **`index.html`** in your web browser and begin your journey.
+> [!TIP]
+> Use [WinRAR](https://www.win-rar.com/download.html?&L=0) if your default extraction method ain't working
 
 ---
-</details>
+
+### Step 3 — Launch the Challenge
+
+After extracting the archive, open:
+
+```text
+index.html
+```
+
+in your preferred web browser to begin your journey.
+
+---
+
+> [!WARNING]
+> ## SPOILER ALERT
+> The walkthrough contains complete solutions and is intended only if you're completely stuck or have already finished the challenge.
+>
+> **➡️ Walkthrough:** https://medium.com/p/0e5990911f76
 
 <p align="center">
 
-━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 
 </p>
 
