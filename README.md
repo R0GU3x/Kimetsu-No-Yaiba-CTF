@@ -19,8 +19,9 @@ If you simply want to play the CTF, follow the steps mentioned below.
 
 ### Step 1 — Downloading Assets
 
-- [The primary CTF Asset](https://drive.google.com/file/d/1IUiw0lPJlV-fGkCychUuXOLTfePpDwiD/view)
-- [Instruction Manual](https://raw.githubusercontent.com/R0GU3x/C2C-Malware-for-Windows-Demo-/master/Instruction%20Manual.pdf)
+- [![Static Badge](https://img.shields.io/badge/Download-ZipFile-8800d6)](https://drive.google.com/file/d/1IUiw0lPJlV-fGkCychUuXOLTfePpDwiD/view)
+- [![Static Badge](https://img.shields.io/badge/Download-Instruction_Manual-00c700)
+](https://raw.githubusercontent.com/R0GU3x/C2C-Malware-for-Windows-Demo-/master/Instruction%20Manual.pdf)
 
 ---
 
@@ -52,7 +53,8 @@ in your preferred web browser to begin your journey.
 > ## SPOILER ALERT
 > The walkthrough contains complete solutions and is intended only if you're completely stuck or have already finished the challenge.
 >
-> **➡️ Walkthrough:** https://medium.com/p/0e5990911f76
+> [![Static Badge](https://img.shields.io/badge/Download-CTF_Walkthrough-d16500)
+](https://medium.com/p/0e5990911f76)
 
 <p align="center">
 
